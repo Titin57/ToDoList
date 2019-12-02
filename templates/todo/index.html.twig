@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %} {% block title %}Ma todo list{% endblock %} {% block body %}
+
+<section class="taches">
+    {% for tache in taches %}
+    <tache>
+        <li>{{ tache.title }} </li>
+        <div class="metadata"> Tache créée le {{ tache.createdAt| date( 'd/m/Y') }}</div>
+    </tache>
+    {% endfor %}
+</section>
+
+{% endblock %}

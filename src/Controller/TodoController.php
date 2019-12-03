@@ -38,29 +38,48 @@ class TodoController extends AbstractController
 
     /**
      * @route("/todo/new" , name="create")
-     * @route
+     * @route("/todo/{id}/delete", name="delete")
      */
-    public function form(Request $request, EntityManagerInterface $manager)
+    public function form(Tache $tache = null, Request $request, EntityManagerInterface $manager)
     {
-        $tache = new Tache();
-
-        $form = $this->createForm(TacheType::class, $tache);
-
-        $form->handleRequest($request);
-
-        dump($tache);
-
-        if($form->isSubmitted() && $form->isValid()){
-            $tache->setCreatedAt(new \DateTime());
-
-            $manager->persist($tache);
-            $manager->flush();
-
-            return $this->redirectToRoute('todo');
-        }
         
+        if(!$tache){
+            $tache = new Tache();
+        
+            $form = $this->createForm(TacheType::class, $tache);
+
+            $form->handleRequest($request);
+
+            //dump($tache);
+
+            if($form->isSubmitted() && $form->isValid()){
+                $tache->setCreatedAt(new \DateTime());
+
+                $manager->persist($tache);
+                $manager->flush();
+
+                return $this->redirectToRoute('todo');
+            }
+        }
+        else {
+
+            $form = $this->createForm(TacheType::class, $tache);
+
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()){
+                $tache->setCreatedAt(new \DateTime());
+
+                $manager->remove($tache);
+                $manager->flush();
+
+                return $this->redirectToRoute('todo');
+            };
+        }
+
         return $this->render('todo/create.html.twig', [
-            'formTache' => $form->createView()
+            'formTache' => $form->createView(),
+            'deleteMode' => $tache->getId() !== null
         ]);
     }
 }

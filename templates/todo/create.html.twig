@@ -4,4 +4,16 @@
 
 {{ form_start(formTache) }} {{ form_row(formTache.title) }} {{ form_row(formTache.content) }}
 
-<button type="submit" class="btn btn-success">Ajouter la tache</button> {{ form_end(formTache) }} {% endblock %}
+<button type="submit" class="btn btn-success">
+        
+        {% if deleteMode %}
+
+            Effacer la tache
+
+        {% else %}
+
+            Ajouter la tâche
+        
+        {% endif %}
+    
+    </button> {{ form_end(formTache) }} {% endblock %}

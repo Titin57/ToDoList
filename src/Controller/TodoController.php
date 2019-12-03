@@ -7,7 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Tache;
+use App\Form\TacheType;
 use App\Repository\TacheRepository;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TodoController extends AbstractController
 {
@@ -36,15 +38,26 @@ class TodoController extends AbstractController
 
     /**
      * @route("/todo/new" , name="create")
+     * @route
      */
-    public function create(Request $request, EntityManagerInterface $manager)
+    public function form(Request $request, EntityManagerInterface $manager)
     {
         $tache = new Tache();
 
-        $form = $this->createFormBuilder($tache)
-                     ->add('title')
-                     ->add('content')
-                     ->getForm();
+        $form = $this->createForm(TacheType::class, $tache);
+
+        $form->handleRequest($request);
+
+        dump($tache);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $tache->setCreatedAt(new \DateTime());
+
+            $manager->persist($tache);
+            $manager->flush();
+
+            return $this->redirectToRoute('todo');
+        }
         
         return $this->render('todo/create.html.twig', [
             'formTache' => $form->createView()

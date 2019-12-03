@@ -1,5 +1,7 @@
-{% extends 'base.html.twig' %} {% block body %}
+{% extends 'base.html.twig' %} {% form_theme formTache 'bootstrap_4_layout.html.twig' %} {% block body %}
 
 <h1>Création d'une tâche</h1>
 
-{{ form(formTache) }} {% endblock %}
+{{ form_start(formTache) }} {{ form_row(formTache.title) }} {{ form_row(formTache.content) }}
+
+<button type="submit" class="btn btn-success">Ajouter la tache</button> {{ form_end(formTache) }} {% endblock %}

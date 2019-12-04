@@ -9,17 +9,18 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Tache;
 use App\Form\TacheType;
 use App\Repository\TacheRepository;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TodoController extends AbstractController
 {
     /**
      * @Route("/todo", name="todo")
      */
+    
+    /* Afficher toutes les tâches */
+
     public function index(TacheRepository $repo)
     {
-        //$repo = $this->getDoctrine()->getRepository(Tache::class);
-
+ 
         $taches = $repo->findAll();
         
         return $this->render('todo/index.html.twig', [
@@ -31,8 +32,11 @@ class TodoController extends AbstractController
     /**
      * @route("/" , name="home")
      */
-    public function home()
-    {
+    
+    /* Afficher la page d'accueil */
+    
+     public function home()
+    { 
         return $this->render('todo/home.html.twig');
     }
 
@@ -40,9 +44,10 @@ class TodoController extends AbstractController
      * @route("/todo/new" , name="create")
      * @route("/todo/{id}/delete", name="delete")
      */
+
     public function form(Tache $tache = null, Request $request, EntityManagerInterface $manager)
     {
-        
+        /* Création d'une nouvelle tâche */
         if(!$tache){
             $tache = new Tache();
         
@@ -50,7 +55,6 @@ class TodoController extends AbstractController
 
             $form->handleRequest($request);
 
-            //dump($tache);
 
             if($form->isSubmitted() && $form->isValid()){
                 $tache->setCreatedAt(new \DateTime());
@@ -61,6 +65,7 @@ class TodoController extends AbstractController
                 return $this->redirectToRoute('todo');
             }
         }
+        /* Si la tâche existe, possibilité de l'effacer */
         else {
 
             $form = $this->createForm(TacheType::class, $tache);
@@ -68,7 +73,6 @@ class TodoController extends AbstractController
             $form->handleRequest($request);
 
             if($form->isSubmitted() && $form->isValid()){
-                $tache->setCreatedAt(new \DateTime());
 
                 $manager->remove($tache);
                 $manager->flush();
@@ -81,5 +85,35 @@ class TodoController extends AbstractController
             'formTache' => $form->createView(),
             'deleteMode' => $tache->getId() !== null
         ]);
+    }
+
+    /**
+     *@route("/todo/{id}/show", name="show") 
+     */
+
+    /* Ouverture d'une tâche à modifier */
+    
+    public function formod(Tache $tache = null, Request $request, EntityManagerInterface $manager)
+    {
+        
+        $formod = $this->createForm(TacheType::class, $tache);
+
+        $formod->handleRequest($request);
+        
+        if($formod->isSubmitted() && $formod->isValid()){
+            $tache->setCreatedAt(new \DateTime());
+
+            $manager->persist($tache);
+            $manager->flush();
+
+            return $this->redirectToRoute('todo');
+        
+        }
+    
+        return $this->render('todo/mod.html.twig', [
+            'formTache' => $formod->createView(),
+            'modMode' => $tache->getId() !== null
+        ]);
+        
     }
 }

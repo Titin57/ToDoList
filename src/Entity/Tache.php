@@ -31,6 +31,11 @@ class Tache
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $valide;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +73,18 @@ class Tache
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getValide(): ?bool
+    {
+        return $this->valide;
+    }
+
+    public function setValide(bool $valide): self
+    {
+        $this->valide = $valide;
 
         return $this;
     }

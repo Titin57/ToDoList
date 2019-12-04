@@ -1,8 +1,12 @@
-{% extends 'base.html.twig' %} {% form_theme formTache 'bootstrap_4_layout.html.twig' %} {% block body %}
+{% extends 'base.html.twig' %} {% form_theme formTache 'bootstrap_4_layout.html.twig' %} {% block body %} {% if deleteMode %}
+
+<h1>Effacer la tâche</h1>
+
+{% else %}
 
 <h1>Création d'une tâche</h1>
 
-{{ form_start(formTache) }} {{ form_row(formTache.title) }} {{ form_row(formTache.content) }}
+{% endif %} {{ form_start(formTache) }} {{ form_row(formTache.title) }} {{ form_row(formTache.content) }}
 
 <button type="submit" class="btn btn-success">
         
@@ -11,7 +15,7 @@
             Effacer la tache
 
         {% else %}
-
+        
             Ajouter la tâche
         
         {% endif %}

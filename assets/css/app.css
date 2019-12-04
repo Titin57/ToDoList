@@ -1,0 +1,43 @@
+body {
+    background-color: lightgray;
+}
+
+a {
+    color: #eee;
+}
+
+tache li {
+    cursor: pointer;
+    position: relative;
+    padding: 12px 8px 12px 40px;
+    background: rgb(112, 110, 110);
+    font-size: 18px;
+    transition: 0.2s;
+    user-select: none;
+    list-style-type: none;
+}
+
+tache li:hover {
+    background: black;
+}
+
+tache li.checked {
+    background: green;
+}
+
+tache li.checked::before {
+    content: '';
+    position: absolute;
+    border-color: ivory;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    top: 10px;
+    left: 16px;
+    transform: rotate(45deg);
+    height: 15px;
+    width: 7px;
+}
+
+tache li a {
+    display: block;
+}
